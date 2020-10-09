@@ -8,6 +8,7 @@
 #include "sha256.h"
 #include <memory>
 #include <iostream>
+
 namespace {
     bool verify(unsigned int idx, unsigned int *pubkey_hash, unsigned int v) {
         SHA256_CTX ctx;
@@ -26,6 +27,7 @@ namespace {
         }
         return true;
     }
+
 }
 
 #endif //PLOT_OPENCL_UTIL_H

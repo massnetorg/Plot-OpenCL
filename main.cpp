@@ -91,10 +91,21 @@ int main() {
     // Create the two input vectors
     unsigned int *pubkeyHash = new unsigned int[8];
     for (int i = 0 ; i < 8; i++) {
-        pubkeyHash[i] = i;
+        pubkeyHash[i] = i * 2;
     }
     Ploter P;
+    auto start = std::chrono::system_clock::now();
     P.calc_table_A(pubkeyHash, 32);
+    int non_zero_num = 0;
+    for (int i = 0; i < 1024000; i++) {
+        if (P.B[i] != 0) {
+            non_zero_num ++;
+        }
+    }
+    std::cout << "non zero: " << non_zero_num << std::endl;
+    auto end = std::chrono::system_clock::now();
+    auto all_duration = duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "all: " << double(all_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
     /*
     unsigned int i;
     const int LIST_SIZE = 33554432;

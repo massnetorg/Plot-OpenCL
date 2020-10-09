@@ -371,7 +371,7 @@ static void sha256_main_table_a(__global const unsigned int *offset, unsigned in
     } else {
         b <<= 1;
     }
-    if (b > offset_ && b < offset_ + 536870912) {
+    if (b > offset_ && b <= offset_ + 536870911) {
         hash[b - offset_] = idx;
     }
 
@@ -389,8 +389,10 @@ __kernel void sha256_mass_table_b(__global unsigned int *pubkey_hash, __global u
     unsigned int offset = get_global_id(0) << 1;
     unsigned int x = buf[offset];
     unsigned int xp = buf[offset + 1];
-    sha256_main_table_b(x, xp, pubkey_hash, buf + offset);
-    sha256_main_table_b(xp, x, pubkey_hash, buf + offset + 1);
+    if (x != 0 && xp != 0) {
+        sha256_main_table_b(x, xp, pubkey_hash, buf + offset);
+        sha256_main_table_b(xp, x, pubkey_hash, buf + offset + 1);
+    }
 }
 
 __kernel void sha256_mass(__global unsigned int *input_buf, __global unsigned int *output_buf) {
@@ -401,4 +403,9 @@ __kernel void sha256_mass(__global unsigned int *input_buf, __global unsigned in
 __kernel void clean_buffer(__global unsigned int *buf) {
     unsigned int idx = get_global_id(0);
     buf[idx] = 0;
+}
+
+__kernel void make_table_b(__global unsigned int *buf) {
+    unsigned int idx = get_global_id(0);
+    buf[idx] = 1;
 }

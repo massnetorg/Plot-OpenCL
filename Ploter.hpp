@@ -12,6 +12,7 @@
 #include <vector>
 #include <immintrin.h>
 #include "util.h"
+#include "thread_pool.h"
 #define MAX_SOURCE_SIZE (0x100000)
 #define MAX_TABLE_A_INPUT_SIZE 536870912 // 2GB of 4 Bytes block
 class Ploter {
@@ -30,6 +31,7 @@ public:
         cl_input_obj = clCreateBuffer(cl_ctx, CL_MEM_READ_ONLY, sizeof(unsigned int), NULL, &cl_ret);
         cl_pubkey_hash_obj = clCreateBuffer(cl_ctx, CL_MEM_READ_ONLY, 8 * sizeof(unsigned int), NULL, &cl_ret);
         cl_output_obj = clCreateBuffer(cl_ctx, CL_MEM_READ_WRITE, MAX_TABLE_A_INPUT_SIZE * sizeof(unsigned int), NULL, &cl_ret);
+
         FILE *fp;
         char *source_str;
         size_t source_size;
@@ -68,6 +70,7 @@ public:
         cl_ret = clFinish(cl_cmd_q);
         cl_ret = clReleaseKernel(cl_krnl_calc_table_a);
         cl_ret = clReleaseKernel(cl_krnl_clean_buffer);
+        cl_ret = clReleaseKernel(cl_krnl_calc_table_b);
         cl_ret = clReleaseProgram(cl_prg);
         cl_ret = clReleaseMemObject(cl_input_obj);
         cl_ret = clReleaseMemObject(cl_output_obj);
@@ -90,6 +93,8 @@ public:
         auto compute_b_duration = duration_cast<std::chrono::microseconds>(start - start);
         //unsigned int *zeros = new unsigned int[MAX_TABLE_A_INPUT_SIZE];
         //memset (zeros, 0, sizeof(unsigned int) * MAX_TABLE_A_INPUT_SIZE);
+        thread_pool make_table_b_thread_pool(4, 2, B);
+        make_table_b_thread_pool.start();
         for (int j = 0; j < block_nums; j++) {
             A = new unsigned int[1 << 29];
             B_rev = new unsigned int[1 << 29];
@@ -129,11 +134,14 @@ public:
             end = std::chrono::system_clock::now();
             copy_buffer_duration += duration_cast<std::chrono::microseconds>(end - start);
 
+            make_table_b_thread_pool.add_task(std::make_pair(A, B_rev));
+            /*
             start = std::chrono::system_clock::now();
             make_table_B(A, B_rev);
             end = std::chrono::system_clock::now();
             auto make_table_b_duration = duration_cast<std::chrono::microseconds>(end - start);
             std::cout << "make_table_b: " << double(make_table_b_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
+            */
             /*
             for (unsigned int i = 0; i < MAX_TABLE_A_INPUT_SIZE - 4; i++) {
                 //_mm_prefetch(&A[output[i + 1]], _MM_HINT_NTA);
@@ -150,14 +158,16 @@ public:
             printf("%d\n", j);
             /*
             int wrong = 0;
+            int nonzero = 0;
             for(unsigned int i = 0; i < 100000; i++) {
-                if (A[offset + i] != 0) {
+                if (A[i] != 0) {
+                    nonzero ++;
                     if ((offset + i) % 2 == 0) {
-                        if (!verify(A[offset + i], pubkeyHash, (offset + i) >> 1)) {
+                        if (!verify(A[i], pubkeyHash, (offset + i) >> 1)) {
                             wrong ++;
                         }
                     } else {
-                        if (!verify(A[offset + i], pubkeyHash, ~((offset + i - 1) >> 1))) {
+                        if (!verify(A[i], pubkeyHash, ~((offset + i - 1) >> 1))) {
                             wrong ++;
                         }
                     }
@@ -165,14 +175,18 @@ public:
                 //printf("sha256(%u) = %u\n", i, A[offset + i]);
             }
             std::cout << "wrong: " << wrong << std::endl;
-             */
+            std::cout << "nonzero: " << nonzero << std::endl;
+            */
+            //delete[] A;
+            //delete[] B_rev;
         }
+        make_table_b_thread_pool.set_terminate();
+        //make_table_b_thread_pool.join();
         std::cout << "compute: " << double(compute_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
         std::cout << "copy_buffer: " << double(copy_buffer_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
         std::cout << "compute_b: " << double(compute_b_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
-
     }
-
+    uint64_t *B;
 private:
     cl_device_id get_most_powerful_device() {
         cl_uint platformCount;
@@ -219,9 +233,13 @@ private:
         for (unsigned int i = 0; i < end; i += 2) {
             x = A[i];
             xp = A[i + 1];
-            B[B_rev[i]] = x << 32 | xp;
-            B[B_rev[i + 1]] = xp << 32 | x;
+            if (x == 0 || xp == 0) {
+                continue;
+            }
+            B[B_rev[i]] = x << 32U | xp;
+            B[B_rev[i + 1]] = xp << 32U | x;
         }
+
         delete[] A;
         delete[] B_rev;
     }
@@ -264,7 +282,6 @@ private:
     size_t group_item_size;
     size_t global_item_size_clean_buf, global_item_size_calc_b;
     unsigned int *A;
-    uint64_t *B;
     unsigned int *B_rev;
 };
 
