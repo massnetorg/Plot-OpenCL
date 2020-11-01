@@ -7,6 +7,7 @@
 
 #include "sha256.h"
 #include <memory>
+#include <cstring>
 #include <iostream>
 
 namespace {

@@ -38,7 +38,7 @@ public:
             std::vector <std::thread *> thread_p;
             auto w_f = [&](unsigned int offset, unsigned int length, unsigned int *A, unsigned int *B_rev, uint64_t *B) {
                 unsigned int end = offset + length;
-                unsigned int block_size = (1 << 26);
+                unsigned int block_size = (1 << 20);
                 uint64_t x, xp;
                 for (unsigned int i = offset; i < end; i += 2) {
                     x = A[i];
@@ -84,7 +84,7 @@ public:
 private:
     int consumer_num;
     int threads_per_consumer;
-    std::atomic_flag lock[64] = {ATOMIC_FLAG_INIT};
+    std::atomic_flag lock[4096] = {ATOMIC_FLAG_INIT};
     std::mutex mtx[64];
     std::vector<std::thread *> threads;
     uint64_t *B;
