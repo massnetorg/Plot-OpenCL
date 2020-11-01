@@ -5,8 +5,11 @@
 #ifndef PLOT_OPENCL_PLOTER_HPP
 #define PLOT_OPENCL_PLOTER_HPP
 #include <iostream>
-#include <OpenCL/cl.h>
-#include <OpenCL/cl_platform.h>
+#ifdef __APPLE__
+#include "OpenCL/opencl.h"
+#else
+#include "CL/cl.h"
+#endif
 #include <chrono>
 #include <thread>
 #include <vector>

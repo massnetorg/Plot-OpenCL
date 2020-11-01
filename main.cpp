@@ -1,6 +1,9 @@
 #include <iostream>
-#include <OpenCL/cl.h>
-#include <OpenCL/cl_platform.h>
+#ifdef __APPLE__
+#include "OpenCL/opencl.h"
+#else
+#include "CL/cl.h"
+#endif
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
