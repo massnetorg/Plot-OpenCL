@@ -90,10 +90,10 @@ public:
         std::cout << "block_nums: " << block_nums << std::endl;
         auto start = std::chrono::system_clock::now();
         auto end = std::chrono::system_clock::now();
-        auto copy_buffer_duration = duration_cast<std::chrono::microseconds>(start - start);
-        auto compute_duration = duration_cast<std::chrono::microseconds>(start - start);
-        auto store_table_a_duration = duration_cast<std::chrono::microseconds>(start - start);
-        auto compute_b_duration = duration_cast<std::chrono::microseconds>(start - start);
+        auto copy_buffer_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
+        auto compute_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
+        auto store_table_a_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
+        auto compute_b_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
         //unsigned int *zeros = new unsigned int[MAX_TABLE_A_INPUT_SIZE];
         //memset (zeros, 0, sizeof(unsigned int) * MAX_TABLE_A_INPUT_SIZE);
         thread_pool make_table_b_thread_pool(4, 2, B);
@@ -117,32 +117,32 @@ public:
                                             &global_item_size, &group_item_size, 0, NULL, NULL);
             clFinish(cl_cmd_q);
             end = std::chrono::system_clock::now();
-            compute_duration += duration_cast<std::chrono::microseconds>(end - start);
+            compute_duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
             // copy output buffer to host
             start = std::chrono::system_clock::now();
             cl_ret = clEnqueueReadBuffer(cl_cmd_q, cl_output_obj, CL_TRUE, 0,
                                          MAX_TABLE_A_INPUT_SIZE * sizeof(unsigned int), A, 0, NULL, NULL);
             end = std::chrono::system_clock::now();
-            copy_buffer_duration += duration_cast<std::chrono::microseconds>(end - start);
+            copy_buffer_duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
             start = std::chrono::system_clock::now();
             cl_ret = clEnqueueNDRangeKernel(cl_cmd_q, cl_krnl_calc_table_b, 1, NULL,
                                             &global_item_size_calc_b, &group_item_size, 0, NULL, NULL);
             clFinish(cl_cmd_q);
             end = std::chrono::system_clock::now();
-            compute_b_duration += duration_cast<std::chrono::microseconds>(end - start);
+            compute_b_duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
             start = std::chrono::system_clock::now();
             cl_ret = clEnqueueReadBuffer(cl_cmd_q, cl_output_obj, CL_TRUE, 0,
                                          MAX_TABLE_A_INPUT_SIZE * sizeof(unsigned  int), B_rev, 0, NULL, NULL);
             clFinish(cl_cmd_q);
             end = std::chrono::system_clock::now();
-            copy_buffer_duration += duration_cast<std::chrono::microseconds>(end - start);
+            copy_buffer_duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
             make_table_b_thread_pool.add_task(std::make_pair(A, B_rev));
             /*
             start = std::chrono::system_clock::now();
             make_table_B(A, B_rev);
             end = std::chrono::system_clock::now();
-            auto make_table_b_duration = duration_cast<std::chrono::microseconds>(end - start);
+            auto make_table_b_duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
             std::cout << "make_table_b: " << double(make_table_b_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
             */
             /*
