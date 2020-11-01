@@ -226,51 +226,6 @@ private:
         return most_powerful_device;
     }
 
-    void make_table_B(unsigned int *A, unsigned int *B_rev) {
-        unsigned int end = 1 << 29;
-        uint64_t x = 0, xp = 0;
-        uint64_t pos = 0;
-        for (unsigned int i = 0; i < end; i += 2) {
-            x = A[i];
-            xp = A[i + 1];
-            if (x == 0 || xp == 0) {
-                continue;
-            }
-            B[B_rev[i]] = x << 32U | xp;
-            B[B_rev[i + 1]] = xp << 32U | x;
-        }
-
-        delete[] A;
-        delete[] B_rev;
-    }
-
-    void write_table_A(unsigned int *output) {
-        std::atomic_flag lock[256];
-        for (int i = 0; i < 256; i++) {
-            lock[i].clear(std::memory_order_release);
-        }
-        int thread_num = 6;
-        std::vector<std::thread *> thread_p;
-        auto w_f = [&](unsigned int offset, unsigned int length, unsigned int *out, unsigned int *A) {
-            unsigned int end = offset + length;
-            unsigned int block_size = (1LL << 32) / 256;
-            for (unsigned int i = offset; i < end; i++) {
-                int block = out[i] / block_size;
-                while (lock[block].test_and_set(std::memory_order_acquire));
-                A[out[i]] = i;
-                lock[block].clear(std::memory_order_release);
-            }
-        };
-        for (int i = 0; i < thread_num; i++) {
-            unsigned int length = (MAX_TABLE_A_INPUT_SIZE / thread_num);
-            unsigned int offset = i * length;
-            thread_p.emplace_back(new std::thread(w_f, offset, length, output, A));
-        }
-        for (int i = 0; i < thread_num; i++) {
-            thread_p[i]->join();
-            delete thread_p[i];
-        }
-    }
     cl_int cl_ret;
     cl_device_id device_id;
     cl_context cl_ctx;
