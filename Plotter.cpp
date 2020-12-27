@@ -215,3 +215,24 @@ cl_device_id Plotter::get_most_powerful_device() {
     free(platforms);
     return most_powerful_device;
 }
+
+void Plotter::makeHeader(unsigned int *pubkeyHash, unsigned char *pubkey)  {
+    static std::string filecode = "DC9081169821110F139A7FC8486D74F3749653DD3F60F127F8F0F14571AE3F6D";
+    memset(header, 0, 4096);
+    // filecode
+    memcpy(header, filecode.data(), 32);
+    // version
+    uint64_t *version = reinterpret_cast<uint64_t *>(header + 32);
+    *version = 1;
+    // bitlength
+    header[40] = 32;
+    // type
+    header[41] = 1;
+    // checkpoint
+    uint64_t *checkpoint = reinterpret_cast<uint64_t *>(header + 42);
+    *checkpoint = (1LL << 31);
+    // pubkeyhash
+    memcpy(header + 50, pubkeyHash, 32);
+    // pubkey
+    memcpy(header + 82, pubkey, 33);
+}
