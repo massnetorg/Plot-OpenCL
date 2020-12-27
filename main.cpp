@@ -12,7 +12,7 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
-#include "Ploter.hpp"
+#include "Plotter.hpp"
 #define MAX_SOURCE_SIZE (0x100000)
 
 // pubkeyHash : 256bit 8 * uint32
@@ -95,9 +95,9 @@ int main() {
     for (int i = 0 ; i < 8; i++) {
         pubkeyHash[i] = i * 2;
     }
-    Ploter P;
+    Plotter P;
     auto start = std::chrono::system_clock::now();
-    P.calc_table_A(pubkeyHash, 32);
+    P.plot(pubkeyHash, 32);
     int non_zero_num = 0;
     for (int i = 0; i < 1024000; i++) {
         if (P.B[i] != 0) {

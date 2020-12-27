@@ -13,9 +13,6 @@ class thread_pool {
 public:
     thread_pool(int consumer_num_, int threads_per_consumer_, uint64_t *B_): consumer_num(consumer_num_),
                 threads_per_consumer(threads_per_consumer_), B(B_) {
-        //for (int i = 0; i < 64; i++) {
-        //    lock[i].clear(std::memory_order_release);
-        //}
     }
 
     void set_terminate() {
@@ -85,7 +82,6 @@ private:
     int consumer_num;
     int threads_per_consumer;
     std::atomic_flag lock[4096] = {ATOMIC_FLAG_INIT};
-    std::mutex mtx[64];
     std::vector<std::thread *> threads;
     uint64_t *B;
     MsgQueue<std::pair<unsigned int *, unsigned int *> > task_q;
