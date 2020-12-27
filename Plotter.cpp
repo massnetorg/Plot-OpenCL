@@ -67,8 +67,6 @@ Plotter::~Plotter() {
     cl_ret = clReleaseContext(cl_ctx);
     delete[] B;
     delete[] header;
-    delete[] A;
-    delete[] B_rev;
 }
 
 void Plotter::plot(unsigned int *pubkeyHash, unsigned int bl) {
