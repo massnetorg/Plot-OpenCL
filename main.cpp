@@ -38,8 +38,11 @@ int main() {
     auto end = std::chrono::system_clock::now();
     auto all_duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
     std::cout << "all: " << double(all_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
-    std::ofstream out_file("table_b", std::ios::binary);
-    out_file.write((char *)(P.header), 4096);
-    out_file.write((char *)(P.B), sizeof(uint64_t) * (1LL << 32));
+    FILE *out_file = fopen("table_b", "wb");
+    fwrite(P.header, 1, 4096, out_file);
+    for (int i = 0; i < 8; i++) {
+        fwrite(P.B + i * (1LL << 29), sizeof(uint64_t), (1 << 29), out_file);
+    }
+    fclose(out_file);
     return 0;
 }
