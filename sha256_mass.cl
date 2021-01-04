@@ -11,70 +11,70 @@
 #define S2(x) (rotl32 ((x), 30u) ^ rotl32 ((x), 19u) ^ rotl32 ((x), 10u))
 #define S3(x) (rotl32 ((x), 26u) ^ rotl32 ((x), 21u) ^ rotl32 ((x),  7u))
 
-#define SHA256C00 0x428a2f98u
-#define SHA256C01 0x71374491u
-#define SHA256C02 0xb5c0fbcfu
-#define SHA256C03 0xe9b5dba5u
-#define SHA256C04 0x3956c25bu
-#define SHA256C05 0x59f111f1u
-#define SHA256C06 0x923f82a4u
-#define SHA256C07 0xab1c5ed5u
-#define SHA256C08 0xd807aa98u
-#define SHA256C09 0x12835b01u
-#define SHA256C0a 0x243185beu
-#define SHA256C0b 0x550c7dc3u
-#define SHA256C0c 0x72be5d74u
-#define SHA256C0d 0x80deb1feu
-#define SHA256C0e 0x9bdc06a7u
-#define SHA256C0f 0xc19bf174u
-#define SHA256C10 0xe49b69c1u
-#define SHA256C11 0xefbe4786u
-#define SHA256C12 0x0fc19dc6u
-#define SHA256C13 0x240ca1ccu
-#define SHA256C14 0x2de92c6fu
-#define SHA256C15 0x4a7484aau
-#define SHA256C16 0x5cb0a9dcu
-#define SHA256C17 0x76f988dau
-#define SHA256C18 0x983e5152u
-#define SHA256C19 0xa831c66du
-#define SHA256C1a 0xb00327c8u
-#define SHA256C1b 0xbf597fc7u
-#define SHA256C1c 0xc6e00bf3u
-#define SHA256C1d 0xd5a79147u
-#define SHA256C1e 0x06ca6351u
-#define SHA256C1f 0x14292967u
-#define SHA256C20 0x27b70a85u
-#define SHA256C21 0x2e1b2138u
-#define SHA256C22 0x4d2c6dfcu
-#define SHA256C23 0x53380d13u
-#define SHA256C24 0x650a7354u
-#define SHA256C25 0x766a0abbu
-#define SHA256C26 0x81c2c92eu
-#define SHA256C27 0x92722c85u
-#define SHA256C28 0xa2bfe8a1u
-#define SHA256C29 0xa81a664bu
-#define SHA256C2a 0xc24b8b70u
-#define SHA256C2b 0xc76c51a3u
-#define SHA256C2c 0xd192e819u
-#define SHA256C2d 0xd6990624u
-#define SHA256C2e 0xf40e3585u
-#define SHA256C2f 0x106aa070u
-#define SHA256C30 0x19a4c116u
-#define SHA256C31 0x1e376c08u
-#define SHA256C32 0x2748774cu
-#define SHA256C33 0x34b0bcb5u
-#define SHA256C34 0x391c0cb3u
-#define SHA256C35 0x4ed8aa4au
-#define SHA256C36 0x5b9cca4fu
-#define SHA256C37 0x682e6ff3u
-#define SHA256C38 0x748f82eeu
-#define SHA256C39 0x78a5636fu
-#define SHA256C3a 0x84c87814u
-#define SHA256C3b 0x8cc70208u
-#define SHA256C3c 0x90befffau
-#define SHA256C3d 0xa4506cebu
-#define SHA256C3e 0xbef9a3f7u
-#define SHA256C3f 0xc67178f2u
+#define SHA256C00 0x107A9B40u
+#define SHA256C01 0x15D343C8u
+#define SHA256C02 0x1F832C97u
+#define SHA256C03 0x09196EB6u
+#define SHA256C04 0x1A3521F0u
+#define SHA256C05 0x1B4E2BAAu
+#define SHA256C06 0x1ECAB17Au
+#define SHA256C07 0x22B15A5Fu
+#define SHA256C08 0x071E14A6u
+#define SHA256C09 0x0B049EE4u
+#define SHA256C0a 0x206FA884u
+#define SHA256C0b 0x243A913Au
+#define SHA256C0c 0x129D81EBu
+#define SHA256C0d 0x020441A2u
+#define SHA256C0e 0x1AF95535u
+#define SHA256C0f 0x1186C607u
+#define SHA256C10 0x008720FAu
+#define SHA256C11 0x0CDE6553u
+#define SHA256C12 0x211994AFu
+#define SHA256C13 0x22A925A4u
+#define SHA256C14 0x067CB0A2u
+#define SHA256C15 0x19672126u
+#define SHA256C16 0x1500D69Du
+#define SHA256C17 0x021BD321u
+#define SHA256C18 0x14D28390u
+#define SHA256C19 0x1B9377DCu
+#define SHA256C1a 0x17EEC3B1u
+#define SHA256C1b 0x0F318F19u
+#define SHA256C1c 0x1209AD1Bu
+#define SHA256C1d 0x02BFF016u
+#define SHA256C1e 0x20264CADu
+#define SHA256C1f 0x0DCA2418u
+#define SHA256C20 0x1148B5C7u
+#define SHA256C21 0x24949014u
+#define SHA256C22 0x0BDECD79u
+#define SHA256C23 0x1EE14E8Fu
+#define SHA256C24 0x1DDCC5E3u
+#define SHA256C25 0x03735183u
+#define SHA256C26 0x03F12FE7u
+#define SHA256C27 0x071515C0u
+#define SHA256C28 0x0EFAF299u
+#define SHA256C29 0x00736663u
+#define SHA256C2a 0x2109EAF8u
+#define SHA256C2b 0x0BF12D08u
+#define SHA256C2c 0x0BD2C905u
+#define SHA256C2d 0x0C3E0A50u
+#define SHA256C2e 0x2113FDACu
+#define SHA256C2f 0x24143795u
+#define SHA256C30 0x21E7D3E6u
+#define SHA256C31 0x10FAFE53u
+#define SHA256C32 0x09593102u
+#define SHA256C33 0x216A2E84u
+#define SHA256C34 0x21728290u
+#define SHA256C35 0x22B4C81Fu
+#define SHA256C36 0x1140DB2Bu
+#define SHA256C37 0x1B83BCD5u
+#define SHA256C38 0x19E78FE0u
+#define SHA256C39 0x17BCF2AAu
+#define SHA256C3a 0x07D9379Fu
+#define SHA256C3b 0x1C9FFFD5u
+#define SHA256C3c 0x0510ACF3u
+#define SHA256C3d 0x07E32C1Du
+#define SHA256C3e 0x11079C1Au
+#define SHA256C3f 0x0ED85BC2u
 
 __constant uint k_sha256[64] =
 {
@@ -119,14 +119,14 @@ static void sha256_main(__global unsigned int *W, __global unsigned int *hash) {
     //    W[i] = SWAP(W[i]);
     //}
 
-    unsigned int a = 0x6a09e667;
-    unsigned int b = 0xbb67ae85;
-    unsigned int c = 0x3c6ef372;
-    unsigned int d = 0xa54ff53a;
-    unsigned int e = 0x510e527f;
-    unsigned int f = 0x9b05688c;
-    unsigned int g = 0x1f83d9ab;
-    unsigned int h = 0x5be0cd19;
+    unsigned int a = 0x05DCA181;
+    unsigned int b = 0x23305590;
+    unsigned int c = 0x1B63F0AC;
+    unsigned int d = 0x100D00D1;
+    unsigned int e = 0x05DCA181;
+    unsigned int f = 0x1F3976D0;
+    unsigned int g = 0x0E1895AD;
+    unsigned int h = 0x16C86B6D;
 
     unsigned int w0_t = SWAP(W[0]);
     unsigned int w1_t = SWAP(W[1]);
@@ -196,25 +196,25 @@ static void sha256_main(__global unsigned int *W, __global unsigned int *hash) {
     ROUND_EXPAND();
     ROUND_STEP(48);
 
-    hash[0] = SWAP(a + 0x6a09e667);
-    hash[1] = SWAP(b + 0xbb67ae85);
-    hash[2] = SWAP(c + 0x3c6ef372);
-    hash[3] = SWAP(d + 0xa54ff53a);
-    hash[4] = SWAP(e + 0x510e527f);
-    hash[5] = SWAP(f + 0x9b05688c);
-    hash[6] = SWAP(g + 0x1f83d9ab);
-    hash[7] = SWAP(h + 0x5be0cd19);
+    hash[0] = SWAP(a + 0x05DCA181);
+    hash[1] = SWAP(b + 0x23305590);
+    hash[2] = SWAP(c + 0x1B63F0AC);
+    hash[3] = SWAP(d + 0x100D00D1);
+    hash[4] = SWAP(e + 0x05DCA181);
+    hash[5] = SWAP(f + 0x1F3976D0);
+    hash[6] = SWAP(g + 0x0E1895AD);
+    hash[7] = SWAP(h + 0x16C86B6D);
 }
 
 static void sha256_main_table_b(unsigned int x, unsigned int xp, __global const unsigned int *pubkey_hash, __global unsigned int* hash) {
-    unsigned int a = 0x6a09e667;
-    unsigned int b = 0xbb67ae85;
-    unsigned int c = 0x3c6ef372;
-    unsigned int d = 0xa54ff53a;
-    unsigned int e = 0x510e527f;
-    unsigned int f = 0x9b05688c;
-    unsigned int g = 0x1f83d9ab;
-    unsigned int h = 0x5be0cd19;
+    unsigned int a = 0x05DCA181;
+    unsigned int b = 0x23305590;
+    unsigned int c = 0x1B63F0AC;
+    unsigned int d = 0x100D00D1;
+    unsigned int e = 0x05DCA181;
+    unsigned int f = 0x1F3976D0;
+    unsigned int g = 0x0E1895AD;
+    unsigned int h = 0x16C86B6D;
     unsigned int w0_t = 0x4d415353; // "MASS"
     unsigned int w1_t = SWAP(pubkey_hash[0]);
     unsigned int w2_t = SWAP(pubkey_hash[1]);
@@ -283,18 +283,18 @@ static void sha256_main_table_b(unsigned int x, unsigned int xp, __global const 
     ROUND_EXPAND();
     ROUND_STEP(48);
 
-    hash[0] = SWAP(a + 0x6a09e667);
+    hash[0] = SWAP(a + 0x05DCA181);
 }
 
 static void sha256_main_table_a(__global const unsigned int *offset, unsigned int idx, __global const unsigned int *pubkey_hash, __global unsigned int *hash) {
-    unsigned int a = 0x6a09e667;
-    unsigned int b = 0xbb67ae85;
-    unsigned int c = 0x3c6ef372;
-    unsigned int d = 0xa54ff53a;
-    unsigned int e = 0x510e527f;
-    unsigned int f = 0x9b05688c;
-    unsigned int g = 0x1f83d9ab;
-    unsigned int h = 0x5be0cd19;
+    unsigned int a = 0x05DCA181;
+    unsigned int b = 0x23305590;
+    unsigned int c = 0x1B63F0AC;
+    unsigned int d = 0x100D00D1;
+    unsigned int e = 0x05DCA181;
+    unsigned int f = 0x1F3976D0;
+    unsigned int g = 0x0E1895AD;
+    unsigned int h = 0x16C86B6D;
     unsigned int offset_ = offset[0];
     unsigned int w0_t = 0x4d415353; // "MASS"
     unsigned int w1_t = SWAP(pubkey_hash[0]);
@@ -365,7 +365,7 @@ static void sha256_main_table_a(__global const unsigned int *offset, unsigned in
     ROUND_EXPAND();
     ROUND_STEP(48);
 
-    b = SWAP(a + 0x6a09e667);
+    b = SWAP(a + 0x05DCA181);
     if (b > HALF_32BIT) {
         b = ~b << 1 | 1;
     } else {
@@ -375,7 +375,7 @@ static void sha256_main_table_a(__global const unsigned int *offset, unsigned in
         hash[b - offset_] = idx;
     }
 
-    //hash[0] = SWAP(a + 0x6a09e667);
+    //hash[0] = SWAP(a + 0x05DCA181);
 }
 
 __kernel void sha256_mass_table_a(__global const unsigned int *offset, __global const unsigned int *pubkey_hash, __global unsigned int *output_buf) {

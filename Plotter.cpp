@@ -218,17 +218,22 @@ cl_device_id Plotter::get_most_powerful_device() {
 }
 
 void Plotter::makeHeader(unsigned int *pubkeyHash, unsigned char *pubkey)  {
-    static std::string filecode = "DC9081169821110F139A7FC8486D74F3749653DD3F60F127F8F0F14571AE3F6D";
+    static const unsigned char filecode[32] = {
+            0x52, 0xa7, 0xad, 0x74, 0xc4, 0x92, 0x9d, 0xec,
+            0x7b, 0x5c, 0x8d, 0x46, 0xcc, 0x3b, 0xaf, 0xa8,
+            0x1f, 0xc9, 0x61, 0x29, 0x28, 0x3b, 0x3a, 0x69,
+            0x23, 0xcd, 0x12, 0xf4, 0x1a, 0x30, 0xb3, 0xac
+    };
     memset(header, 0, 4096);
     // filecode
-    memcpy(header, filecode.data(), 32);
+    memcpy(header, filecode, 32);
     // version
     uint64_t *version = reinterpret_cast<uint64_t *>(header + 32);
     *version = 1;
     // bitlength
     header[40] = 32;
     // type
-    header[41] = 1;
+    header[41] = 2;
     // checkpoint
     uint64_t *checkpoint = reinterpret_cast<uint64_t *>(header + 42);
     *checkpoint = (1LL << 31);
