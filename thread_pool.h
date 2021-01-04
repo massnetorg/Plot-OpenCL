@@ -45,11 +45,11 @@ public:
                     }
                     unsigned int block = B_rev[i] / block_size;
                     while (lock[block].test_and_set(std::memory_order_acquire));
-                    B[B_rev[i]] = (x << 32U) | xp;
+                    B[B_rev[i]] = (xp << 32U) | x;
                     lock[block].clear(std::memory_order_release);
                     block = B_rev[i + 1] / block_size;
                     while (lock[block].test_and_set(std::memory_order_acquire));
-                    B[B_rev[i + 1]] = (xp << 32U) | x;
+                    B[B_rev[i + 1]] = (x << 32U) | xp;
                     lock[block].clear(std::memory_order_release);
                 }
             };

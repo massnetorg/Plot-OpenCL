@@ -84,7 +84,8 @@ void Plotter::plot(unsigned int *pubkeyHash, unsigned int bl) {
     auto compute_b_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
     //unsigned int *zeros = new unsigned int[MAX_TABLE_A_INPUT_SIZE];
     //memset (zeros, 0, sizeof(unsigned int) * MAX_TABLE_A_INPUT_SIZE);
-    thread_pool make_table_b_thread_pool(2, 16, B);
+    int cores = std::thread::hardware_concurrency();
+    thread_pool make_table_b_thread_pool(2, cores / 2, B);
     make_table_b_thread_pool.start();
     for (int j = 0; j < block_nums; j++) {
         A = new unsigned int[1 << 29];
