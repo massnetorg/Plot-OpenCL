@@ -26,7 +26,10 @@ int main(int argc, char* argv[]) {
     std::string output_dir = std::string(argv[1]);
     int64_t ordinary = strtoll(argv[2], NULL, 10);
     char *pubkey_str = argv[3];
-    std::cout << output_dir << " " << ordinary << " " << pubkey_str << std::endl;
+
+    std::filesystem::path file_path(output_dir);
+    file_path /= std::to_string(ordinary) + "_" + std::string(pubkey_str) + "_32.massdb";
+
     unsigned char *pubkey = new unsigned char[33];
     for (int i = 0; i < 33; i++) {
         pubkey[i] = Utils::hex2byte(pubkey_str + i * 2);
@@ -38,8 +41,6 @@ int main(int argc, char* argv[]) {
     P.makeHeader(pubkeyHash, pubkey);
     P.plot(pubkeyHash, 32);
 
-    std::filesystem::path file_path(output_dir);
-    file_path /= std::to_string(ordinary) + "_" + std::string(pubkey_str) + "_32.massdb";
     FILE *out_file = fopen(file_path.c_str(), "wb");
     fwrite(P.header, 1, 4096, out_file);
     for (int i = 0; i < 8; i++) {
