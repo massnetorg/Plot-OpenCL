@@ -23,4 +23,5 @@ $ cp ../sha256_mass.cl ./
 $ ./plot-opencl <output_dir> <ordinal> <public_key>
 ```
 Please note that Plot-OpenCL only supports bit_length of 32.
+
 For more information about arguments, please refer to https://github.com/massnetorg/Plot-CPU/blob/main/README.md
