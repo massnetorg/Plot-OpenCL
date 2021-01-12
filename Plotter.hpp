@@ -14,8 +14,8 @@
 #include <thread>
 #include <vector>
 #include <immintrin.h>
-#include "util.h"
-#include "thread_pool.h"
+#include "Utils.h"
+#include "TableBFiller.h"
 #define MAX_SOURCE_SIZE (0x100000)
 #define MAX_TABLE_A_INPUT_SIZE 536870912 // 2GB of 4 Bytes block
 class Plotter {

@@ -74,27 +74,19 @@ void Plotter::plot(unsigned int *pubkeyHash, unsigned int bl) {
     unsigned int MASS_Prefix = 1296126803; // "MASS"
     unsigned int max_block_size = MAX_TABLE_A_INPUT_SIZE; // 2GB of 64 bytes block
     int block_nums = (1LL << bl) / (uint64_t)max_block_size;
-    // Use OpenMP to accel
-    std::cout << "block_nums: " << block_nums << std::endl;
     auto start = std::chrono::system_clock::now();
     auto end = std::chrono::system_clock::now();
     auto copy_buffer_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
     auto compute_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
     auto store_table_a_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
     auto compute_b_duration = std::chrono::duration_cast<std::chrono::microseconds>(start - start);
-    //unsigned int *zeros = new unsigned int[MAX_TABLE_A_INPUT_SIZE];
-    //memset (zeros, 0, sizeof(unsigned int) * MAX_TABLE_A_INPUT_SIZE);
     int cores = std::thread::hardware_concurrency();
-    thread_pool make_table_b_thread_pool(2, cores / 2, B);
+    TableBFiller make_table_b_thread_pool(2, cores / 2, B);
     make_table_b_thread_pool.start();
     for (int j = 0; j < block_nums; j++) {
         A = new unsigned int[1 << 29];
         B_rev = new unsigned int[1 << 29];
         unsigned int offset = MAX_TABLE_A_INPUT_SIZE * j;
-        // copy input buffer to device
-        //unsigned int zero = 0;
-        //cl_ret = clEnqueueWriteBuffer(cl_cmd_q, cl_output_obj, CL_TRUE, 0, sizeof(unsigned int) * MAX_TABLE_A_INPUT_SIZE, zeros, 0, NULL, NULL);
-        //cl_ret = clEnqueueFillBuffer(cl_cmd_q, cl_output_obj, &zero, sizeof(unsigned int), 0, sizeof(unsigned int) * (size_t)MAX_TABLE_A_INPUT_SIZE, 0, NULL, NULL);
         start = std::chrono::system_clock::now();
         cl_ret = clEnqueueWriteBuffer(cl_cmd_q, cl_input_obj, CL_TRUE, 0, sizeof(unsigned int), &offset, 0, NULL, NULL);
 
@@ -127,53 +119,8 @@ void Plotter::plot(unsigned int *pubkeyHash, unsigned int bl) {
         copy_buffer_duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 
         make_table_b_thread_pool.add_task(std::make_pair(A, B_rev));
-        /*
-        start = std::chrono::system_clock::now();
-        make_table_B(A, B_rev);
-        end = std::chrono::system_clock::now();
-        auto make_table_b_duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-        std::cout << "make_table_b: " << double(make_table_b_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
-        */
-        /*
-        for (unsigned int i = 0; i < MAX_TABLE_A_INPUT_SIZE - 4; i++) {
-            //_mm_prefetch(&A[output[i + 1]], _MM_HINT_NTA);
-            _mm_prefetch(&A[output[i + 2]], _MM_HINT_NTA);
-            A[output[i]] = offset + i;
-        }
-        A[output[MAX_TABLE_A_INPUT_SIZE - 4]] = offset + MAX_TABLE_A_INPUT_SIZE - 4;
-        A[output[MAX_TABLE_A_INPUT_SIZE - 3]] = offset + MAX_TABLE_A_INPUT_SIZE - 3;
-        A[output[MAX_TABLE_A_INPUT_SIZE - 2]] = offset + MAX_TABLE_A_INPUT_SIZE - 2;
-        A[output[MAX_TABLE_A_INPUT_SIZE - 1]] = offset + MAX_TABLE_A_INPUT_SIZE - 1;
-         */
-        //write_table_A(output);
-
-        printf("%d\n", j);
-        /*
-        int wrong = 0;
-        int nonzero = 0;
-        for(unsigned int i = 0; i < 100000; i++) {
-            if (A[i] != 0) {
-                nonzero ++;
-                if ((offset + i) % 2 == 0) {
-                    if (!verify(A[i], pubkeyHash, (offset + i) >> 1)) {
-                        wrong ++;
-                    }
-                } else {
-                    if (!verify(A[i], pubkeyHash, ~((offset + i - 1) >> 1))) {
-                        wrong ++;
-                    }
-                }
-            }
-            //printf("sha256(%u) = %u\n", i, A[offset + i]);
-        }
-        std::cout << "wrong: " << wrong << std::endl;
-        std::cout << "nonzero: " << nonzero << std::endl;
-        */
-        //delete[] A;
-        //delete[] B_rev;
     }
     make_table_b_thread_pool.set_terminate();
-    //make_table_b_thread_pool.join();
     std::cout << "compute: " << double(compute_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
     std::cout << "copy_buffer: " << double(copy_buffer_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
     std::cout << "compute_b: " << double(compute_b_duration.count()) * std::chrono::microseconds::period::num / std::chrono::microseconds::period::den << "s" << std::endl;
