@@ -24,4 +24,6 @@ $ ./plot-opencl <output_dir> <ordinal> <public_key>
 ```
 Please note that Plot-OpenCL only supports bit_length of 32.
 
+Use `numactl` binding to specific node for better performance if your device has more than 1 NUMA nodes.
+
 For more information about arguments, please refer to https://github.com/massnetorg/Plot-CPU/blob/main/README.md
